@@ -11,53 +11,26 @@
  * @return {boolean}
  */
 var isMatch = function (s, p) {
-  const dot = '.'
-  const star = '*'
+  const memo = Array.from(Array.from({ length: s.length + 1 }, (v) => Array.from({ length: p.length + 1 }, () => false)))
+  memo[s.length][p.length] = true
 
-  if (p.indexOf(dot) < 0 && p.indexOf(star) < 0) {
-    return s === p
-  }
+  for (let i = s.length;i > -1;i--) {
+    for (let j = p.length - 1;j > -1;j--) {
 
-  let j = 0
-  let lastChar = ''
-  for (let i = 0;i < p.length;i++) {
-    const cur = p.charAt(i)
-    if (cur === dot) {
-      lastChar = s.charAt(j)
-      j++
-    } else if (cur === star) {
-      const lastPatternChar = p.charAt(i - 1)
-      while (s.charAt(j) === lastPatternChar || lastPatternChar === dot) {
-        if (j > s.length - 1) {
-          break
-        }
-        j++
-      }
-    } else {
-      if (j === s.length) {
-        if (p.charAt(i) === s.charAt(j - 1) && p.charAt(i - 1) === star) return true
-        else if (p.charAt(i + 1) === star) {
-          // j--
-          continue
-        } else {
+      let ans
+      const isFirstMath = s.length > i && (s.charAt(i) === p.charAt(j) || p.charAt(j) === '.')
 
-          return false
-        }
-      }
-      if (p.charAt(i) !== s.charAt(j)) {
-        if (p.charAt(i + 1) !== star)
-          return false
+      if (p.length - j >= 2 && p.charAt(j + 1) === '*') {
+        ans = memo[i][j + 2] || (isFirstMath && memo[i + 1][j])
       } else {
-        j++
+        ans = isFirstMath && memo[i + 1][j + 1]
       }
-    }
 
+      // console.log('ans', i, j, ans)
+      memo[i][j] = ans
+    }
   }
-  console.log(j, s.length)
-  return j === s.length
+  // return math(s, p, 0, 0)
+  return memo[0][0]
 }
 // @lc code=end
-
-console.log('aaa', isMatch('a', 'ab*'))
-
-
