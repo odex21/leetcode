@@ -19,55 +19,25 @@ const clearStar = (s) => s.split('')
  * @return {boolean}
  */
 var isMatch = function (s, p) {
-  const clearStar = (s) => s.split('')
-    .reduce((res, cur) => {
-      if (res.length > 0 && cur === '*' && res[res.length - 1] === cur) {
-        return res
-      }
-      return res + cur
-    }, '')
+  let i = 0, j = 0
+  let iStar = -1, jStar = -1
 
-  p = clearStar(p)
-
-
-  const match = (s, p) => {
-
-    if (!p.length) {
-      return !s.length
-    }
-    if (!s.length) {
-      for (let i = 0;i < p.length;i++) {
-        if (p[i] !== '*') {
-          return false
-        }
-      }
-      return true
-    }
-    if (p[0] === '?') {
-      return match(s.slice(1), p.slice(1))
-    }
-    if (p[0] === '*') {
-
-      let p1 = p.slice(1)
-
-      hasSharp = false
-
-      for (let i = 0;i <= s.length && hasSharp;i++) {
-        const temp = match(s.slice(i), p1)
-        if (temp) {
-          return true
-        }
-      }
-      hasSharp = true
+  while (i < s.length) {
+    if (j < p.length && (s.charAt(i) === p.charAt(j) || p.charAt(j) === '?')) {
+      i++
+      j++
+    } else if (j < p.length && p.charAt(j) === '*') {
+      iStar = i
+      jStar = j++
+    } else if (iStar >= 0) {
+      i = ++iStar
+      j = jStar + 1
+    } else
       return false
-    }
-    return s[0] === p[0] && match(s.slice(1), p.slice(1))
   }
-  return match(s, p)
+
+  while (j < p.length && p.charAt(j) === '*') j++
+  return j === p.length
 }
 // @lc code=end
-
-
-// console.log('ls', isMatch("acdcb", "a*c?b"))
-// console.log('ls', isMatch("ac", "*"))
 
