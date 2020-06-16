@@ -10,11 +10,11 @@
  * @return {number}
  */
 var numRabbits = function (answers) {
-  const colors = new Map()
-  answers.forEach((cur, index) => {
+  const colors = answers.reduce((colors, cur) => {
     const total = colors.get(cur)
     colors.set(cur, total ? total + 1 : 1)
-  })
+  }, new Map())
+
   let res = 0
 
   const getLeast = (num) => (num ? num + 1 : 1)
