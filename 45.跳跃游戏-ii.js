@@ -10,34 +10,23 @@
  * @return {number}
  */
 var jump = function (nums) {
-
-  let now = 0
-  let step = 0
-  const last = nums.length - 1
-  while (now < last) {
-    step++
-
-    if (nums[now] + now >= last) break
-
-    const allowStep = nums[now]
-
-    let next = 1
-    let temp = now
+  if (nums.length === 1) return 0
+  return (step = nums.reduce((res, cur, index, arr) => {
     let max = 0
-
-    while (next <= allowStep && next + now < last) {
-      if (nums[next + now] + next > max) {
-        max = nums[next + now] + next
-        temp = next + now
-      }
-      next++
-    }
-
-    now = temp
-  }
-
-  return step
+    const nextIndex =
+      index +
+      arr
+        .slice(index + 1, index + 1 + cur)
+        .reduce((maxIndex, next, index, arr) => {
+          if (index + next > max) {
+            max = index + next
+            return index
+          } else {
+            return maxIndex
+          }
+        }, 0)
+    arr.splice(0, nextIndex + 1)
+    return res + 1
+  }, 0))
 }
 // @lc code=end
-
-
