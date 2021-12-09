@@ -1,0 +1,8 @@
+const { convert } = require('./6.z-字形变换.js')
+// console.log(convert('PAYPALISHIRING', 4))
+// console.log(convert('A', 1))
+// console.log(convert('AB', 1))
+// console.log(convert('ABCDE', 4))
+// console.log(convert('AB', 3))
+console.log(convert('PAYPALISHIRING', 5))
+// console.log(convert('PAYPALISHIRING', 3))
